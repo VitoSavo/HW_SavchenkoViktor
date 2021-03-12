@@ -1,0 +1,115 @@
+
+// Домашняя работа по уроку №3
+
+// 1. Описать несколько структур – любой легковой автомобиль SportCar и любой грузовик TrunkCar.
+// 2. Структуры должны содержать марку авто, год выпуска, объем багажника/кузова, запущен ли двигатель, открыты ли окна, заполненный объем багажника.
+// 3. Описать перечисление с возможными действиями с автомобилем: запустить/заглушить двигатель, открыть/закрыть окна, погрузить/выгрузить из кузова/багажника груз определенного объема.
+
+enum EngineStarted: String {
+    case on = "Запущен"
+    case off = "Заглушен"
+}
+enum PositionOfWindows: String {
+    case open = "Открыты"
+    case closed = "Закрыты"
+}
+
+enum MaximumLoad: String {
+    case sportCar = "Максимальная загрузка 450 kg"
+    case trunkCar = "Максимальная загрузка 6000 kg"
+}
+
+struct SportCar {
+    let carBrand: String // Марка авто
+    let yearOfIssue: UInt // Год выпуска
+    let trunkVolume: UInt // Объем багажника
+    var sportCarLoad: MaximumLoad // Максимальная возможная загрузка
+    var engine: EngineStarted // Состояние двигателя
+    var PositionOfWindows: PositionOfWindows // Позиция окон
+    
+}
+
+struct TrunkCar {
+    let carBrand: String
+    let yearOfIssue: UInt
+    let trunkVolume: UInt
+    var trunkLoad: MaximumLoad
+    var engine: EngineStarted
+    var PositionOfWindows: PositionOfWindows
+    let fullTrunk: UInt
+}
+
+
+
+let sportCar = SportCar(carBrand: "BMW", yearOfIssue: 2020, trunkVolume: 350, sportCarLoad: .sportCar, engine: .off, PositionOfWindows: .open)
+
+let trunkCar = TrunkCar(carBrand: "KAMAZ", yearOfIssue: 1995, trunkVolume: 5000, trunkLoad: .trunkCar, engine: .on, PositionOfWindows: .closed, fullTrunk: 10000)
+
+//4. Добавить в структуры метод с одним аргументом типа перечисления, который будет менять свойства структуры в зависимости от действия.
+
+struct NewTrunkCar {
+    let carBrand: String
+    let yearOfIssue: UInt
+    let trunkVolume: UInt
+    var trunkLoad: MaximumLoad
+    var engine: EngineStarted
+    var positionOfWindows: PositionOfWindows
+    let fullTrunk: UInt
+ 
+    mutating func closedWindows() {
+        positionOfWindows = .closed
+    }
+}
+
+var newTrunkCar = NewTrunkCar (carBrand: "Nissan", yearOfIssue: 2021, trunkVolume: 450, trunkLoad: .sportCar, engine: .on, positionOfWindows: .open, fullTrunk: 550)
+
+newTrunkCar.closedWindows()
+newTrunkCar.positionOfWindows
+
+// 5. Инициализировать несколько экземпляров структур. Применить к ним различные действия.
+// 6. Вывести значения свойств экземпляров в консоль.
+
+extension UIColor {
+    
+    var name: String? {
+        switch self {
+        case UIColor.black: return "black"
+        case UIColor.darkGray: return "darkGray"
+        case UIColor.lightGray: return "lightGray"
+        case UIColor.white: return "white"
+        case UIColor.gray: return "gray"
+        case UIColor.red: return "red"
+        case UIColor.green: return "green"
+        case UIColor.blue: return "blue"
+        case UIColor.cyan: return "cyan"
+        case UIColor.yellow: return "yellow"
+        case UIColor.magenta: return "magenta"
+        case UIColor.orange: return "orange"
+        case UIColor.purple: return "purple"
+        case UIColor.brown: return "brown"
+        default: return nil
+        }
+    }
+}
+
+
+struct SuperNewTrunkCar {
+    let carBrand: String
+    let yearOfIssue: UInt
+    var trunkLoad: MaximumLoad
+    var engine: EngineStarted
+    let color: UIColor
+         mutating func enginePositionOff() {
+            engine = .off
+    }
+         mutating func enginePositionOn() {
+        engine = .on
+    }
+}
+
+var superNewTrunkCar = SuperNewTrunkCar(carBrand:"Scania", yearOfIssue: 1995, trunkLoad: .trunkCar, engine: .off, color: .brown)
+print(superNewTrunkCar.carBrand )
+print(superNewTrunkCar.color)
+print(superNewTrunkCar.yearOfIssue)
+print(superNewTrunkCar.engine)
+print(superNewTrunkCar.trunkLoad)
