@@ -1,0 +1,174 @@
+// Домашняя работа по уроку №5
+
+
+// 1. Создать протокол «Car» и описать свойства, общие для автомобилей, а также методы действий.
+
+protocol CarProtocol: class {
+    
+    var price: Int { get set }
+    var vehicleCondition: String { get set }
+    var windows: String { get set}
+    var engine: String { get set }
+
+    func PriceInfo(newprice: Int)
+    func ConditionInfo(condition: String)
+    func WindowsPosition(position: String)
+    func EnginePosition(position: String)
+
+}
+
+// 2. Создать расширения для протокола «Car» и реализовать в них методы конкретных действий с автомобилем: открыть/закрыть окно, запустить/заглушить двигатель и т.д. (по одному методу на действие, реализовывать следует только те действия, реализация которых общая для всех автомобилей).
+
+extension CarProtocol {
+    
+    func PriceInfo (newprice: Int) {
+        price = newprice
+        print("Цена автомобиля\(price)")
+    }
+    
+    func ConditionInfo (condition: String) {
+        vehicleCondition = condition
+        print("Cостояние автомобиля \(vehicleCondition)")
+    }
+    
+    func WindowsPosition (position: String) {
+        windows = position
+        print("Окна \(windows)")
+    }
+    
+    func EnginePosition (position: String) {
+        engine = position
+        print("Двигатель \(windows)")
+    }
+}
+
+
+// 3. Создать два класса, имплементирующих протокол «Car» - trunkCar и sportСar. Описать в них свойства, отличающиеся для спортивного автомобиля и цистерны.
+
+class NewTrunkCar: CarProtocol {
+  
+    var price: Int
+    var vehicleCondition: String
+    var windows: String
+    var engine: String
+    let trunkVolume: Int
+    let typeOfCargo: String
+    
+    init(price: Int, vehicleCondition: String, windows: String, engine: String, trunkVolume: Int, typeOfCargo: String ) {
+        self.price = price
+        self.vehicleCondition = vehicleCondition
+        self.windows = windows
+        self.engine = engine
+        self.trunkVolume = trunkVolume
+        self.typeOfCargo = typeOfCargo
+    }
+    
+    func PriceInfo (newprice: Int) {
+        price = newprice
+        print("Цена автомобиля\(price)")
+    }
+    
+    func ConditionInfo (condition: String) {
+        vehicleCondition = condition
+        print("Cостояние автомобиля \(vehicleCondition)")
+    }
+    
+    func WindowsPosition (position: String) {
+        windows = position
+        print("Окна \(windows)")
+    }
+    
+    func EnginePosition (position: String) {
+        engine = position
+        print("Двигатель \(windows)")
+    }
+
+}
+
+class NewSportCar: CarProtocol {
+  
+    var price: Int
+    var vehicleCondition: String
+    var windows: String
+    var engine: String
+    var typeOfSportCompetition: String
+    var nameOfSportTeam: String
+    
+    init(price: Int, vehicleCondition: String, windows: String, engine: String, typeOfSportCompetition: String, nameOfSportTeam: String) {
+        self.price = price
+        self.vehicleCondition = vehicleCondition
+        self.windows = windows
+        self.engine = engine
+        self.typeOfSportCompetition = typeOfSportCompetition
+        self.nameOfSportTeam = nameOfSportTeam
+    }
+    
+    func PriceInfo (newprice: Int) {
+        price = newprice
+        print("Цена автомобиля\(price)")
+    }
+    
+    func ConditionInfo (condition: String) {
+        vehicleCondition = condition
+        print("Cостояние автомобиля \(vehicleCondition)")
+    }
+    
+    func WindowsPosition (position: String) {
+        windows = position
+        print("Окна \(windows)")
+    }
+    
+    func EnginePosition (position: String) {
+        engine = position
+        print("Двигатель \(windows)")
+    }
+    
+    func CompetitionInfo (type: String) {
+        typeOfSportCompetition = type
+        print("Вид соревнований \(typeOfSportCompetition)")
+    }
+    
+    func SportTeamName (team: String) {
+        nameOfSportTeam = team
+        print("Название команды \(nameOfSportTeam)")
+    }
+}
+
+// 4. Для каждого класса написать расширение, имплементирующее протокол CustomStringConvertible.
+
+extension  NewTrunkCar: CustomStringConvertible {
+    var description: String {
+        return("Данные автомобиля класса NewTrunkCar: цена - \(price), состояние - \(vehicleCondition), окна - \(windows), двигатель - \(engine), объем цестерны - \(trunkVolume), тип груза - \(typeOfCargo)")
+    }
+}
+
+extension  NewSportCar: CustomStringConvertible {
+    var description: String {
+        return("Данные автомобиля класса NewSportCar: цена - \(price), состояние - \(vehicleCondition), окна - \(windows), двигатель - \(engine), тип соревнования - \(typeOfSportCompetition), название команды - \(nameOfSportTeam)")
+    }
+}
+
+
+// 5. Создать несколько объектов каждого класса. Применить к ним различные действия.
+// 6. Вывести сами объекты в консоль.
+
+var newTrunkCar = NewTrunkCar(price: 10_000, vehicleCondition: "Бывшая в употреблении", windows: "Закрыты", engine: "Заглушен", trunkVolume: 5_000, typeOfCargo: "Нефтепродукты")
+
+var anotherNewTrunkCar = NewTrunkCar(price: 100_000, vehicleCondition: "Новая", windows: "Закртыты", engine: "Запущен", trunkVolume: 20_000, typeOfCargo: "Промышленные отходы")
+
+var newSportCar = NewSportCar(price: 90_000, vehicleCondition: "Требуется ремонт кузова", windows: "Открыты", engine: "Заглушен", typeOfSportCompetition: "Nascar", nameOfSportTeam: "Arizona dreamers")
+var anotherNewSportCar = NewSportCar(price: 1_000_000, vehicleCondition: "Ремонт не требуется", windows: "Закрыты", engine: "Заглушен", typeOfSportCompetition: "Formula 1", nameOfSportTeam: "Ferrari")
+
+print(newTrunkCar)
+print("---------------------------------------------------------")
+newTrunkCar.PriceInfo(newprice: 5_000)
+newTrunkCar.ConditionInfo(condition: ": Новая")
+print(newTrunkCar)
+print("---------------------------------------------------------")
+
+print(anotherNewTrunkCar)
+print("---------------------------------------------------------")
+print(newSportCar)
+print("---------------------------------------------------------")
+print(anotherNewSportCar)
+
