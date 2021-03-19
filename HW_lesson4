@@ -1,0 +1,170 @@
+// Домашняя работа по уроку №4
+
+// 1. Описать класс Car c общими свойствами автомобилей и пустым методом действия по аналогии с прошлым заданием.
+
+class Car {
+
+        let carBrand: String  // Марка авто
+        let yearOfIssue: UInt  // Год выпуска
+        let trunkVolume: UInt // Объем багажника
+        var speedLimit: UInt // Максимальная скорость
+        var engine: EngineStarted // Состояние двигателя
+        var positionOfWindows: PositionOfWindows // Позиция окон
+    
+    init(carBrand: String, yearOfIssue: UInt, trunkVolume: UInt,speedLimit: UInt, engine: EngineStarted, positionOfWindows: PositionOfWindows) {
+        
+        self.carBrand = carBrand
+        self.yearOfIssue = yearOfIssue
+        self.trunkVolume = trunkVolume
+        self.speedLimit = speedLimit
+        self.engine = engine
+        self.positionOfWindows = positionOfWindows
+    }
+    
+    func EngineStart() { // Пустой метод
+        
+    }
+    func PrintInfoCar() {
+        print("Марка автомобиля: \(carBrand)")
+        print("Год выпуска: \(yearOfIssue)")
+        print("Объем багажника: \(trunkVolume)")
+        print("Максимальная скорость: \(speedLimit)")
+        print("Состояние двигателя: \(engine.rawValue)")
+        print("Позиция окон: \(positionOfWindows.rawValue)")
+        }
+    }
+
+    
+// 2. Описать пару его наследников trunkCar и sportСar. Подумать, какими отличительными свойствами обладают эти автомобили. Описать в каждом наследнике специфичные для него свойства.
+// 3. Взять из прошлого урока enum с действиями над автомобилем. Подумать, какие особенные действия имеет trunkCar, а какие – sportCar. Добавить эти действия в перечисление.
+// 4. В каждом подклассе переопределить метод действия с автомобилем в соответствии с его классом.
+
+class TrunkCar: Car {
+    
+    enum ApplicationArea {
+        case construction, chemicalIndustry, miningIndustry // Сфера использования грузовика
+    }
+    
+    var transportationOfDangerousGoods: Bool // Возможность перевозки опасных грузов
+    var typeOfCargo: String // Тип груза
+    var applicationArea: ApplicationArea // Сфера использования грузовика
+
+
+    init(carBrand: String, yearOfIssue: UInt, trunkVolume: UInt,speedLimit: UInt, engine: EngineStarted, positionOfWindows: PositionOfWindows, transportationOfDangerousGoods: Bool, typeOfCargo: String, applicationArea: ApplicationArea) {
+
+    self.transportationOfDangerousGoods = transportationOfDangerousGoods
+    self.typeOfCargo = typeOfCargo
+    self.applicationArea = applicationArea
+        
+    super.init(carBrand: carBrand, yearOfIssue: yearOfIssue, trunkVolume: trunkVolume, speedLimit: speedLimit, engine: engine, positionOfWindows: positionOfWindows)
+  }
+    override func EngineStart() {
+        engine = .on
+        Swift.print("Двигатель запущен в тестовом режиме ")
+    }
+    
+    override func PrintInfoCar() {
+        print("Марка автомобиля: \(carBrand)")
+        print("Год выпуска: \(yearOfIssue)")
+        print("Объем багажника: \(trunkVolume)")
+        print("Максимальная скорость: \(speedLimit)")
+        print("Состояние двигателя: \(engine.rawValue)")
+        print("Позиция окон: \(positionOfWindows.rawValue)")
+        print("Перевозка опасных грузов: \(transportationOfDangerousGoods)")
+        print("Тип груза: \(typeOfCargo)")
+        print("Сфера использования грузовика: \(applicationArea)")
+    }
+     
+    func TrunkCarApplicationArea() {
+        applicationArea = .construction
+        Swift.print("Этот грузовик работате на стройке.")
+    }
+}
+
+
+class SportCar: Car {
+    
+    enum TypeOfSportCar {
+        case Formula1, Formula2, Drugster // Тип спортивного автомобиля
+    }
+
+    enum TypeOfCompetition {
+        case national, international // Тип соревнования
+    }
+    
+    var typeOfSportCar: TypeOfSportCar
+    var typeOfCompetition: TypeOfCompetition
+    
+    init(carBrand: String, yearOfIssue: UInt, trunkVolume: UInt,speedLimit: UInt, engine: EngineStarted, positionOfWindows: PositionOfWindows, typeOfSportCar: TypeOfSportCar, typeOfCompetition: TypeOfCompetition) {
+    
+    self.typeOfSportCar = typeOfSportCar
+    self.typeOfCompetition = typeOfCompetition
+    
+    super.init(carBrand: carBrand, yearOfIssue: yearOfIssue, trunkVolume: trunkVolume, speedLimit: speedLimit, engine: engine, positionOfWindows: positionOfWindows)
+    }
+    
+    override func PrintInfoCar() {
+        print("Марка автомобиля: \(carBrand)")
+        print("Год выпуска: \(yearOfIssue)")
+        print("Объем багажника: \(trunkVolume)")
+        print("Максимальная скорость: \(speedLimit)")
+        print("Состояние двигателя: \(engine.rawValue)")
+        print("Позиция окон: \(positionOfWindows.rawValue)")
+        print("Тип спортивного автомобиля: \(typeOfSportCar)")
+        print("Тип cоревнований: \(typeOfCompetition)")
+
+    }
+    
+    override func EngineStart() {
+        engine = .on
+        print("Двигатель запущен в спортивном режиме")
+    }
+    
+    func EngineOff() {
+        engine = .off
+        print("Двигатель заглушен")
+    }
+    func SportCarCompetition() {
+        typeOfCompetition = .international
+        print("Этот автомобиль - участник международной гонки.")
+    }
+}
+
+// 5. Создать несколько объектов каждого класса. Применить к ним различные действия.
+// 6. Вывести значения свойств экземпляров в консоль.
+
+var parentCar = Car(carBrand: "Lada", yearOfIssue: 1990, trunkVolume: 350, speedLimit: 110, engine: .off, positionOfWindows: .closed)
+
+parentCar.EngineStart()
+parentCar.PrintInfoCar()
+print("--------------------------------------------------")
+
+var mainFamilyCar = Car(carBrand: "Mercedes-Benz", yearOfIssue: 2021, trunkVolume: 1500, speedLimit: 220, engine: .on, positionOfWindows: .closed)
+
+mainFamilyCar.EngineStart()
+mainFamilyCar.PrintInfoCar()
+print("--------------------------------------------------")
+
+var trunkCar = TrunkCar(carBrand: "ZIL", yearOfIssue: 1980, trunkVolume: 3000, speedLimit: 90, engine: .off, positionOfWindows: .closed, transportationOfDangerousGoods: true, typeOfCargo: "Box", applicationArea: .miningIndustry)
+
+trunkCar.EngineStart()
+trunkCar.PrintInfoCar()
+print("--------------------------------------------------")
+
+var heavyTrunkCar = TrunkCar(carBrand: "IVECO", yearOfIssue: 2020, trunkVolume: 2000, speedLimit: 180, engine: .off, positionOfWindows: .open, transportationOfDangerousGoods: false, typeOfCargo: "Garbage", applicationArea: .construction)
+
+heavyTrunkCar.TrunkCarApplicationArea()
+heavyTrunkCar.PrintInfoCar()
+print("--------------------------------------------------")
+
+var sportCar = SportCar(carBrand: "Lamborghini", yearOfIssue: 2015, trunkVolume: 150, speedLimit: 390, engine: .on, positionOfWindows: .closed, typeOfSportCar: .Formula2, typeOfCompetition: .national)
+
+sportCar.SportCarCompetition()
+sportCar.PrintInfoCar()
+print("--------------------------------------------------")
+
+var drugster = SportCar(carBrand: "SpeedFlash", yearOfIssue: 1999, trunkVolume: 0, speedLimit: 600, engine: .on, positionOfWindows: .closed, typeOfSportCar: .Drugster, typeOfCompetition: .national)
+
+drugster.SportCarCompetition()
+drugster.PrintInfoCar()
+print("--------------------------------------------------")
