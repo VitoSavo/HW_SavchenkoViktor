@@ -1,0 +1,80 @@
+// Домашняя работа №6
+
+// 1. Реализовать свой тип коллекции «очередь» (queue) c использованием дженериков.
+// 2. // 2. Добавить ему несколько методов высшего порядка, полезных для этой коллекции (пример: filter для массивов).
+// 3. * Добавить свой subscript, который будет возвращать nil в случае обращения к несуществующему индексу.
+
+enum TransportClass: String {
+    case personal = "Личный автомобиль"
+    case commercial = "Коммерчиский транспорт"
+}
+
+enum ApplicationArea: String {
+    case familyAuto = "Семейный автомобиль"
+    case schoolBus  = "Школьный автобус"
+    case cityBus = "Общественный транспорт"
+}
+
+enum EngineType: String {
+    case gasoline = "Бензиновый двигатель"
+    case diesel = "Дизельный двигатель"
+}
+
+class Transport {
+    var transportClass: TransportClass
+    var applicationArea: ApplicationArea
+    var engineType: EngineType
+    
+    init(transportClass: TransportClass, applicationArea: ApplicationArea, engineType: EngineType ) {
+        self.transportClass = transportClass
+        self.applicationArea = applicationArea
+        self.engineType = engineType
+    }
+}
+
+extension Transport: CustomStringConvertible {
+    var description: String {
+        
+        """
+    Класс транспортного средства: \(transportClass.rawValue), Сфера использования транспортного средства: \(applicationArea.rawValue), Тип двигателя транспортного средства: \(engineType.rawValue)
+        ----------------------------------------------------------------------------------------------------------------------
+    """
+        }
+}
+
+struct QueueStack<T> {
+    private var elements: [T] = []
+
+    mutating func push(_ element: T) {
+        elements.append(element)
+    }
+
+    mutating func pop() -> T? {
+        guard elements.count > 0 else { return nil }
+        return elements.removeFirst()
+    }
+    
+    func filter(predicate: (T) -> Bool) -> [T] {elements.filter(predicate)}
+    
+}
+ 
+
+extension QueueStack {
+    subscript(index: Int) -> T? {
+        guard index >= 0 && index < elements.count else {
+            return nil
+        }
+        return elements[index]
+    }
+}
+
+var transport = QueueStack<Transport>()
+transport.push(Transport(transportClass: .commercial, applicationArea: .cityBus, engineType: .diesel))
+transport.push(Transport(transportClass: .personal, applicationArea: .familyAuto, engineType: .gasoline))
+transport.push(Transport(transportClass: .commercial, applicationArea: .schoolBus, engineType: .diesel))
+transport.push(Transport(transportClass: .commercial, applicationArea: .cityBus, engineType: .gasoline))
+
+var filterList = transport.filter(predicate:) {element in element.engineType == .gasoline}
+filterList.forEach {print($0.description)} // отсортировать и распечатать все транспортные средства с бензиновым двигателем
+
+transport[1]
