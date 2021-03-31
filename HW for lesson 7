@@ -1,0 +1,160 @@
+// Домашняя работа №7
+
+// 1. Придумать класс, методы которого могут завершаться неудачей и возвращать либо значение, либо ошибку Error?. Реализовать их вызов и обработать результат метода при помощи конструкции if let, или guard let.
+
+  
+struct Item {           // позиции техники в каталоге
+    var priceFor1Hour: Int      // сумма аренды руб/час.
+    var availabilityOfEquipment: Int      // Колличество конкретной еденицы техники доступной для заказа
+    let specialization: Specialization // Специализация атомобиля
+}
+
+               
+struct Specialization {
+    let name: String    //  Специализация автомобиля
+}
+
+class SpecialEquipmentCatalog {  // Каталог аренды спецтранспорта
+    
+    var inventory = [ // Техника в наличии
+        "Автокран": Item(priceFor1Hour: 5000, availabilityOfEquipment: 0, specialization: Specialization(name: "Автокран")),
+        "Самосвал": Item(priceFor1Hour: 2000, availabilityOfEquipment: 10, specialization: Specialization(name: "Самосвал")),
+        "Трактор": Item(priceFor1Hour: 1000, availabilityOfEquipment: 15, specialization: Specialization(name: "Трактор"))
+    ]
+    
+ 
+    var clientDeposited = 1000 // Депозит клиента для аренды техники
+
+}
+
+enum SpecialEquipmentCatalogError: Error {
+
+    case invalidSelection                    // Нет такой техники в каталоге
+    case outOfStock                          // Такой тип техники занят - уже в аренде
+    case insufficientFunds(coinsNeeded: Int) // Недостаточно  депозита клиента для аренды выбранной техники
+    
+    var localizedDescription: String {
+        switch self {
+        case .invalidSelection:
+            return "Нет такой техники в каталоге"
+        case .outOfStock:
+            return "Такой тип техники занят - уже в аренде"
+        case .insufficientFunds(coinsNeeded: let coinsNeeded):
+            return "Недостаточно  депозита клиента: \(coinsNeeded)"
+        }
+    }
+}
+
+ 
+extension SpecialEquipmentCatalog {
+    
+    func vendWithError(itemNamed name: String) -> (specialization: Specialization?, error: SpecialEquipmentCatalogError?) {
+        guard let item = inventory[name] else {
+            return (specialization: nil, error: SpecialEquipmentCatalogError.invalidSelection)
+        }
+        
+        guard item.availabilityOfEquipment > 0 else {
+            return (specialization: nil, error: SpecialEquipmentCatalogError.outOfStock)
+        }
+        
+        guard item.priceFor1Hour <= clientDeposited else {
+            return (specialization: nil, error: SpecialEquipmentCatalogError.insufficientFunds(coinsNeeded: item.priceFor1Hour - clientDeposited))
+        }
+        
+        clientDeposited -= item.priceFor1Hour
+        var newItem = item
+        newItem.availabilityOfEquipment -= 1
+        inventory[name] = newItem
+        return (specialization: newItem.specialization, error: nil)
+    }
+}
+
+let specialEquipmentCatalog2 = SpecialEquipmentCatalog()
+let client1 = specialEquipmentCatalog2.vendWithError(itemNamed: "Автокран")
+let client2 = specialEquipmentCatalog2.vendWithError(itemNamed: "Самосвал")
+let client3 = specialEquipmentCatalog2.vendWithError(itemNamed: "Трактор")
+let client4 = specialEquipmentCatalog2.vendWithError(itemNamed: "Мопед")
+
+// Обрабатываем запрос на аренду
+if let specialization = client1.specialization {
+    print("Вы оформили в аренду: \(specialization.name)")
+    } else if let error = client1.error {
+    print("Невозможно офрмить аренду: \(error.localizedDescription)")
+}
+print("------------------------------------------------------------------")
+
+if let specialization = client2.specialization {
+    print("Вы оформили в аренду: \(specialization.name)")
+    } else if let error = client2.error {
+    print("Невозможно офрмить аренду: \(error.localizedDescription)")
+}
+print("------------------------------------------------------------------")
+
+if let specialization = client3.specialization {
+    print("Вы оформили в аренду: \(specialization.name)")
+    } else if let error = client3.error {
+    print("Невозможно офрмить аренду: \(error.localizedDescription)")
+}
+print("------------------------------------------------------------------")
+
+if let specialization = client4.specialization {
+    print("Вы оформили в аренду: \(specialization.name)")
+    } else if let error = client4.error {
+    print("Невозможно офрмить аренду: \(error.localizedDescription)")
+}
+print("------------------------------------------------------------------")
+
+
+
+// 2. Придумать класс, методы которого могут выбрасывать ошибки. Реализуйте несколько throws-функций. Вызовите их и обработайте результат вызова при помощи конструкции try/catch.
+
+ 
+extension SpecialEquipmentCatalog {
+    
+    func correctOperation(itemNamed name: String) throws -> Specialization {
+        guard let item = inventory[name] else {
+            throw SpecialEquipmentCatalogError.invalidSelection
+        }
+    
+        
+        guard item.availabilityOfEquipment > 0 else {
+            throw SpecialEquipmentCatalogError.outOfStock
+        }
+        
+        guard item.priceFor1Hour <= clientDeposited else {
+            throw SpecialEquipmentCatalogError.insufficientFunds(coinsNeeded: item.priceFor1Hour - clientDeposited)
+        }
+        
+        clientDeposited -= item.priceFor1Hour
+        var newItem = item
+        newItem.availabilityOfEquipment -= 1
+        inventory[name] = newItem
+        return newItem.specialization
+    }
+}
+
+let specialEquipmentCatalog = SpecialEquipmentCatalog()
+
+do {
+    let anotherOperation = try specialEquipmentCatalog.correctOperation(itemNamed: "Трактор")
+    print("Оформлена аренда на: \(anotherOperation.name)")
+    
+} catch let error {
+    print(error)
+}
+
+do {
+    let anotherOperation2 = try specialEquipmentCatalog.correctOperation(itemNamed: "Трактор")
+    print("Оформлена аренда на: \(anotherOperation2.name)")
+    
+} catch SpecialEquipmentCatalogError.invalidSelection {
+    print("Нет такой техники в каталоге")
+    
+} catch SpecialEquipmentCatalogError.insufficientFunds(let coinsNeeded) {
+    print("Сумма депозита клиента недостаточна, нужно добавить \(coinsNeeded) ")
+    
+} catch let error {
+    print(error)
+}
+
+let sell = try? specialEquipmentCatalog.correctOperation(itemNamed: "Tрактор")
